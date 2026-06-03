@@ -15,6 +15,8 @@ const loginSchema = z.object({
   password: z.string().min(1),
 });
 
+const BCRYPT_SALT = parseInt(process.env.BCRYPT_SALT_ROUNDS || "10", 10);
+
 export async function register(req: Request, res: Response) {
   const body = registerSchema.safeParse(req.body);
   if (!body.success) {
@@ -30,7 +32,7 @@ export async function register(req: Request, res: Response) {
     return;
   }
 
-  const hashed = await bcrypt.hash(password, 10);
+  const hashed = await bcrypt.hash(password, BCRYPT_SALT);
   const user = await prisma.user.create({
     data: { email, password: hashed, name },
   });

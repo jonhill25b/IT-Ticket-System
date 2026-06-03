@@ -39,6 +39,9 @@ Thumbs.db
 # TypeScript
 *.tsbuildinfo
 
+# Tests
+coverage/
+
 # Prisma
 # NOTE: migrations are tracked in git so they deploy to production
 # prisma/migrations/  <-- DO NOT uncomment, migrations must be committed
