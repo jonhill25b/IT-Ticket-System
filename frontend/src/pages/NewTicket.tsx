@@ -33,15 +33,15 @@ export default function NewTicket() {
         <form onSubmit={handleSubmit}>
           <div style={styles.group}>
             <label style={styles.label}>Title</label>
-            <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} required placeholder="Brief summary of the issue" style={styles.input} />
+            <input type="text" name="title" value={title} onChange={(e) => setTitle(e.target.value)} required placeholder="Brief summary of the issue" style={styles.input} />
           </div>
           <div style={styles.group}>
             <label style={styles.label}>Description</label>
-            <textarea value={description} onChange={(e) => setDescription(e.target.value)} required rows={5} placeholder="Detailed description..." style={styles.input} />
+            <textarea name="description" value={description} onChange={(e) => setDescription(e.target.value)} required rows={5} placeholder="Detailed description..." style={styles.input} />
           </div>
           <div style={styles.group}>
             <label style={styles.label}>Priority</label>
-            <select value={priority} onChange={(e) => setPriority(e.target.value)} style={styles.input}>
+            <select name="priority" value={priority} onChange={(e) => setPriority(e.target.value)} style={styles.input}>
               <option value="LOW">Low</option>
               <option value="MEDIUM">Medium</option>
               <option value="HIGH">High</option>

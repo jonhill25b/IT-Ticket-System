@@ -76,6 +76,7 @@ export default function Login() {
               <label style={styles.label}>Name</label>
               <input
                 type="text"
+                name="name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 required
@@ -88,6 +89,7 @@ export default function Login() {
             <label style={styles.label}>Email</label>
             <input
               type="email"
+              name="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -99,6 +101,7 @@ export default function Login() {
             <label style={styles.label}>Password</label>
             <input
               type="password"
+              name="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required

@@ -98,7 +98,7 @@ export default function TicketDetail() {
                   <>
                     <div>
                       <label style={styles.label}>Status</label>
-                      <select value={status} onChange={(e) => setStatus(e.target.value)} style={styles.input}>
+                      <select name="status" value={status} onChange={(e) => setStatus(e.target.value)} style={styles.input}>
                         <option value="OPEN">Open</option>
                         <option value="IN_PROGRESS">In Progress</option>
                         <option value="RESOLVED">Resolved</option>
@@ -107,7 +107,7 @@ export default function TicketDetail() {
                     </div>
                     <div>
                       <label style={styles.label}>Priority</label>
-                      <select value={priority} onChange={(e) => setPriority(e.target.value)} style={styles.input}>
+                      <select name="priority" value={priority} onChange={(e) => setPriority(e.target.value)} style={styles.input}>
                         <option value="LOW">Low</option>
                         <option value="MEDIUM">Medium</option>
                         <option value="HIGH">High</option>
@@ -125,7 +125,7 @@ export default function TicketDetail() {
                 )}
                 <div style={{ gridColumn: "1 / -1" }}>
                   <label style={styles.label}>Description</label>
-                  <textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={4} style={styles.input} />
+                  <textarea name="description" value={description} onChange={(e) => setDescription(e.target.value)} rows={4} style={styles.input} />
                 </div>
               </div>
               <div style={{ textAlign: "right", marginTop: 16, display: "flex", gap: 8, justifyContent: "flex-end" }}>
@@ -152,7 +152,7 @@ export default function TicketDetail() {
             <p style={{ color: "var(--text-faint)" }}>No comments yet</p>
           )}
           <form onSubmit={handleComment} style={{ marginTop: 12 }}>
-            <textarea value={comment} onChange={(e) => setComment(e.target.value)} placeholder="Write a comment..." rows={3} style={styles.input} />
+            <textarea name="content" value={comment} onChange={(e) => setComment(e.target.value)} placeholder="Write a comment..." rows={3} style={styles.input} />
             <button type="submit" style={{ ...styles.saveBtn, marginTop: 8 }}>Post Comment</button>
           </form>
         </div>

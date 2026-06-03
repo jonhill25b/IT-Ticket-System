@@ -41,6 +41,9 @@ Thumbs.db
 
 # Tests
 coverage/
+e2e/test-results/
+e2e/playwright-report/
+playwright-report/
 
 # Prisma
 # NOTE: migrations are tracked in git so they deploy to production
