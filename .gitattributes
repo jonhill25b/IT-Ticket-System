@@ -1,0 +1,2 @@
+# Tell GitHub Linguist to classify .jsx files as JavaScript
+*.jsx linguist-language=JavaScript
