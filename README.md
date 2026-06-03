@@ -1,13 +1,20 @@
 # IT Support Ticket System
 
-A full-stack IT support ticket management application built with **Express**, **Prisma**, **PostgreSQL**, and **React**. Features JWT-based authentication, role-based access control (RBAC), and a dark zinc/amber UI theme.
+A full-stack IT support ticket management application built with **Express**, **Prisma**, **PostgreSQL**, and **React**. Features JWT-based authentication, role-based access control (RBAC), and a dark zinc/amber UI theme with light mode support.
 
 **Live Demo:** [https://it-ticket-system-uq54.onrender.com](https://it-ticket-system-uq54.onrender.com)
+
+## About
+
+IT Ticket System is a production-ready help desk application demonstrating full-stack development best practices. Users can create and track support tickets, assign them to team members, and collaborate through threaded comments. The platform enforces role-based access control with three permission levels: **ADMIN** (full access), **AGENT** (view and manage all tickets), and **USER** (create and manage own tickets).
+
+Built as a portfolio project to showcase clean architecture patterns including middleware-first authentication, controller-level business logic, Prisma ORM with PostgreSQL, and a React SPA with theme persistence.
 
 ---
 
 ## Table of Contents
 
+- [About](#about)
 - [Features](#features)
 - [Tech Stack](#tech-stack)
 - [Architecture](#architecture)
