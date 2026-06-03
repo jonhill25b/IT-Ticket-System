@@ -341,6 +341,53 @@ The UI uses a **dark zinc + amber** palette:
 | `npm run db:studio` | Open Prisma Studio (database GUI) |
 | `cd frontend && npm run dev` | Start frontend dev server with HMR |
 | `cd frontend && npm run build` | Build frontend to `public/` |
+| `npm run db:deploy` | Run Prisma migrations in production (no prompts) |
+
+---
+
+## Deployment
+
+This app is configured for deployment to **Render** (backend + static frontend) with a **Neon** free PostgreSQL database.
+
+### Step 1 — Create a Neon Database
+
+1. Go to [neon.tech](https://neon.tech) and sign up (free)
+2. Create a new project
+3. Copy the **Connection String** from the dashboard (it looks like `postgresql://user:pass@ep-xxx.region.neon.tech/dbname?sslmode=require`)
+4. Save this — you'll need it for Render
+
+### Step 2 — Push to GitHub
+
+```bash
+cd C:\Users\jonzh\OneDrive\Desktop\Portfolio\Apps\it-ticket-system
+git init
+git add .
+git commit -m "Initial commit"
+git remote add origin https://github.com/YOUR_USERNAME/it-ticket-system.git
+git push -u origin main
+```
+
+### Step 3 — Deploy to Render
+
+1. Go to [render.com](https://render.com) and sign up
+2. Click **New +** → **Web Service**
+3. Connect your GitHub repo
+4. Render will auto-detect `render.yaml`. Configure:
+   - **Build Command**: `npm install && npm run build && npm run db:deploy`
+   - **Start Command**: `npm start`
+5. Add environment variables:
+   - `DATABASE_URL` — paste your Neon connection string
+   - `JWT_SECRET` — Render can auto-generate this
+6. Click **Create Web Service**
+
+Render will build the backend, build the frontend into `public/`, run database migrations, and start the server. Your app will be live at `https://it-ticket-system.onrender.com`.
+
+### How It Works in Production
+
+- Express serves the React frontend as static files from `public/`
+- All `/api/*` routes hit the Express backend
+- The database runs on Neon's free tier (auto-sleeps after inactivity, wakes on first request)
+- `PORT` is injected by Render — no code changes needed
 
 ---
 

@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: it-ticket-system
+    env: node
+    plan: free
+    buildCommand: npm install && npm run build && npm run db:deploy
+    startCommand: npm start
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+    healthCheckPath: /api/health
