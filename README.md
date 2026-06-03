@@ -1,6 +1,8 @@
 # IT Support Ticket System
 
-A full-stack IT support ticket management application built with **Express**, **Prisma**, **PostgreSQL**, and **React**. Features JWT-based authentication, role-based access control (RBAC), and a dark-themed UI.
+A full-stack IT support ticket management application built with **Express**, **Prisma**, **PostgreSQL**, and **React**. Features JWT-based authentication, role-based access control (RBAC), and a dark zinc/amber UI theme.
+
+**Live Demo:** [https://it-ticket-system-uq54.onrender.com](https://it-ticket-system-uq54.onrender.com)
 
 ---
 
@@ -11,9 +13,8 @@ A full-stack IT support ticket management application built with **Express**, **
 - [Architecture](#architecture)
 - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
-  - [Installation](#installation)
-  - [Database Setup](#database-setup)
-  - [Running the App](#running-the-app)
+  - [Local Development](#local-development)
+  - [Production Deployment](#production-deployment)
 - [Default Accounts](#default-accounts)
 - [API Reference](#api-reference)
   - [Authentication](#authentication)
@@ -22,7 +23,8 @@ A full-stack IT support ticket management application built with **Express**, **
   - [Users](#users)
 - [Role-Based Access Control](#role-based-access-control)
 - [Project Structure](#project-structure)
-- [Color Theme](#color-theme)
+- [Scripts](#scripts)
+- [License](#license)
 
 ---
 
@@ -88,15 +90,16 @@ Client Request
 ### Prerequisites
 
 - **Node.js** 18+
-- **PostgreSQL** 14+
-- **npm** or **pnpm**
+- **PostgreSQL** 14+ (for local development)
+- **npm**
 
-### Installation
+### Local Development
+
+**1. Clone and install:**
 
 ```bash
-# Clone the repository
-git clone <repo-url>
-cd it-ticket-system
+git clone https://github.com/jonhill25b/IT-Ticket-System.git
+cd IT-Ticket-System
 
 # Install backend dependencies
 npm install
@@ -107,40 +110,27 @@ npm install
 cd ..
 ```
 
-### Database Setup
+**2. Set up the database:**
 
-1. Create a PostgreSQL database:
-
-```sql
-CREATE DATABASE it_tickets;
-```
-
-2. Configure your `.env` file:
+Create a PostgreSQL database and configure your `.env` file:
 
 ```env
-DATABASE_URL="postgresql://postgres:YOUR_PASSWORD@localhost:5432/it_tickets?schema=public"
+DATABASE_URL="postgresql://postgres:***@localhost:5432/it_tickets?schema=public"
 JWT_SECRET="your-super-secret-key-change-this-in-production"
 PORT=4000
 ```
 
-3. Run migrations and generate the Prisma client:
+**3. Run migrations and seed data:**
 
 ```bash
 npm run db:migrate
 npm run db:generate
-```
-
-4. (Optional) Seed sample data:
-
-```bash
 npm run db:seed
 ```
 
 This creates 4 test accounts (see [Default Accounts](#default-accounts)) and sample tickets with comments.
 
-### Running the App
-
-You need two terminals:
+**4. Start the app:**
 
 ```bash
 # Terminal 1 — Build the frontend (one-time, or after frontend changes)
@@ -150,7 +140,7 @@ cd frontend && npm run build
 cd .. && npm run dev
 ```
 
-Then open **http://localhost:4000** in your browser.
+Open **http://localhost:4000** in your browser.
 
 For frontend development with hot reload, run the Vite dev server separately:
 
@@ -159,6 +149,49 @@ cd frontend && npm run dev
 ```
 
 This starts the frontend on http://localhost:5173 with API proxying to the backend on port 4000.
+
+### Production Deployment
+
+The app is configured for deployment to **Render** (backend + static frontend) with a **Neon** free PostgreSQL database.
+
+**Step 1 — Create a Neon Database**
+
+1. Go to [neon.tech](https://neon.tech) and sign up (free)
+2. Create a new project
+3. Copy the **Connection String** from the dashboard (it looks like `postgresql://user:***@ep-xxx.region.neon.tech/dbname?sslmode=require`)
+4. Save this — you'll need it for Render
+
+**Step 2 — Push to GitHub**
+
+```bash
+git init
+git add .
+git commit -m "Initial commit"
+git remote add origin https://github.com/YOUR_USERNAME/it-ticket-system.git
+git push -u origin main
+```
+
+**Step 3 — Deploy to Render**
+
+1. Go to [render.com](https://render.com) and sign up
+2. Click **New +** → **Web Service**
+3. Connect your GitHub repo
+4. Render will auto-detect `render.yaml`. Configure:
+   - **Build Command**: `npm install && npm run build && npm run db:deploy`
+   - **Start Command**: `npm start`
+5. Add environment variables:
+   - `DATABASE_URL` — paste your Neon connection string
+   - `JWT_SECRET` — Render can auto-generate this
+6. Click **Create Web Service**
+
+Render will build the backend, build the frontend into `public/`, run database migrations, and start the server.
+
+**How it works in production:**
+
+- Express serves the React frontend as static files from `public/`
+- All `/api/*` routes hit the Express backend
+- The database runs on Neon's free tier (auto-sleeps after inactivity, wakes on first request)
+- `PORT` is injected by Render — no code changes needed
 
 ---
 
@@ -177,7 +210,7 @@ After running `npm run db:seed`, the following accounts are available. All use p
 
 ## API Reference
 
-All API endpoints are prefixed with `/api`. Protected endpoints require an `Authorization: Bearer <token>` header.
+All API endpoints are prefixed with `/api`. Protected endpoints require an `Authorization: Bearer *** header.
 
 ### Authentication
 
@@ -266,7 +299,8 @@ if (req.user.role === "USER") {
 ```
 it-ticket-system/
 ├── prisma/
-│   └── schema.prisma          # Database schema (User, Ticket, Comment models)
+│   ├── schema.prisma          # Database schema (User, Ticket, Comment models)
+│   └── migrations/            # Prisma migration files
 ├── public/                     # Built frontend assets (served by Express)
 ├── src/
 │   ├── index.ts               # Express app entry point, route mounting, static serving
@@ -302,29 +336,14 @@ it-ticket-system/
 │   │       ├── NewTicket.tsx  # Create ticket form
 │   │       └── Users.tsx      # User list with edit/delete modals
 │   └── vite.config.ts         # Vite config (builds to ../public)
+├── render.yaml                # Render deployment configuration
 ├── .env                       # Environment variables (not committed)
+├── .gitignore
+├── .gitattributes             # GitHub linguist configuration
 ├── package.json
-└── tsconfig.json
+├── tsconfig.json
+└── README.md
 ```
-
----
-
-## Color Theme
-
-The UI uses a **dark zinc + amber** palette:
-
-| Token | Value | Usage |
-|---|---|---|
-| `--bg` | `#09090b` | Page background (zinc-950) |
-| `--surface` | `#18181b` | Cards, rows, modals (zinc-900) |
-| `--border` | `#27272a` | Borders, dividers (zinc-800) |
-| `--accent` | `#f59e0b` | Primary accent — buttons, links, highlights (amber-500) |
-| `--accent-hover` | `#d97706` | Button hover state (amber-600) |
-| `--text` | `#ffffff` | Headings, key text |
-| `--text-dim` | `#d4d4d8` | Body text (zinc-300) |
-| `--text-muted` | `#a1a1aa` | Secondary text (zinc-400) |
-| `--text-faint` | `#71717a` | Labels, timestamps (zinc-500) |
-| `--danger` | `#ef4444` | Delete buttons, error states |
 
 ---
 
@@ -333,61 +352,15 @@ The UI uses a **dark zinc + amber** palette:
 | Command | Description |
 |---|---|
 | `npm run dev` | Start backend with hot reload (tsx watch) |
-| `npm run build` | Compile TypeScript backend |
+| `npm run build` | Compile backend, generate Prisma client, build frontend |
 | `npm start` | Run compiled backend |
-| `npm run db:migrate` | Run Prisma migrations |
+| `npm run db:migrate` | Run Prisma migrations (interactive, for development) |
+| `npm run db:deploy` | Run Prisma migrations (non-interactive, for production) |
 | `npm run db:generate` | Generate Prisma client |
 | `npm run db:seed` | Seed database with sample data |
 | `npm run db:studio` | Open Prisma Studio (database GUI) |
 | `cd frontend && npm run dev` | Start frontend dev server with HMR |
 | `cd frontend && npm run build` | Build frontend to `public/` |
-| `npm run db:deploy` | Run Prisma migrations in production (no prompts) |
-
----
-
-## Deployment
-
-This app is configured for deployment to **Render** (backend + static frontend) with a **Neon** free PostgreSQL database.
-
-### Step 1 — Create a Neon Database
-
-1. Go to [neon.tech](https://neon.tech) and sign up (free)
-2. Create a new project
-3. Copy the **Connection String** from the dashboard (it looks like `postgresql://user:pass@ep-xxx.region.neon.tech/dbname?sslmode=require`)
-4. Save this — you'll need it for Render
-
-### Step 2 — Push to GitHub
-
-```bash
-cd C:\Users\jonzh\OneDrive\Desktop\Portfolio\Apps\it-ticket-system
-git init
-git add .
-git commit -m "Initial commit"
-git remote add origin https://github.com/YOUR_USERNAME/it-ticket-system.git
-git push -u origin main
-```
-
-### Step 3 — Deploy to Render
-
-1. Go to [render.com](https://render.com) and sign up
-2. Click **New +** → **Web Service**
-3. Connect your GitHub repo
-4. Render will auto-detect `render.yaml`. Configure:
-   - **Build Command**: `npm install && npm run build && npm run db:deploy`
-   - **Start Command**: `npm start`
-5. Add environment variables:
-   - `DATABASE_URL` — paste your Neon connection string
-   - `JWT_SECRET` — Render can auto-generate this
-6. Click **Create Web Service**
-
-Render will build the backend, build the frontend into `public/`, run database migrations, and start the server. Your app will be live at `https://it-ticket-system.onrender.com`.
-
-### How It Works in Production
-
-- Express serves the React frontend as static files from `public/`
-- All `/api/*` routes hit the Express backend
-- The database runs on Neon's free tier (auto-sleeps after inactivity, wakes on first request)
-- `PORT` is injected by Render — no code changes needed
 
 ---
 
