@@ -40,4 +40,5 @@ Thumbs.db
 *.tsbuildinfo
 
 # Prisma
-prisma/migrations/
+# NOTE: migrations are tracked in git so they deploy to production
+# prisma/migrations/  <-- DO NOT uncomment, migrations must be committed
