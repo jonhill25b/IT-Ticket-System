@@ -3,11 +3,15 @@ services:
     name: it-ticket-system
     env: node
     plan: free
-    buildCommand: npm install && npm run build && npm run db:deploy
+    buildCommand: npm install && npm run build && npm run db:deploy && npm run db:seed:prod
     startCommand: npm start
     envVars:
       - key: DATABASE_URL
         sync: false
       - key: JWT_SECRET
         generateValue: true
+      - key: BCRYPT_SALT_ROUNDS
+        value: "10"
+      - key: JWT_EXPIRES_IN
+        value: "24h"
     healthCheckPath: /api/health

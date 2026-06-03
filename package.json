@@ -12,6 +12,7 @@
     "db:seed": "tsx src/prisma/seed.ts",
     "db:studio": "prisma studio",
     "db:deploy": "prisma migrate deploy",
+    "db:seed:prod": "tsx src/prisma/seed-production.ts",
     "test": "jest",
     "test:coverage": "jest --coverage",
     "test:e2e": "playwright test",
