@@ -1,6 +1,8 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-:root {
+/* ── Dark Mode (default) ── */
+:root,
+[data-theme="dark"] {
   --bg: #09090b;
   --surface: #18181b;
   --surface-hover: #1e1e22;
@@ -9,17 +11,52 @@
   --accent: #f59e0b;
   --accent-hover: #d97706;
   --accent-dim: #fbbf24;
-  --accent-bg: rgba(245,158,11,0.05);
+  --accent-bg: rgba(245,158,11,0.08);
   --accent-border: rgba(245,158,11,0.3);
+  --accent-text: #f59e0b;
   --danger: #ef4444;
   --danger-hover: #dc2626;
+  --danger-bg: rgba(239,68,68,0.12);
+  --danger-border: rgba(239,68,68,0.3);
   --success: #22c55e;
-  --warning: #f59e0b;
   --info: #06b6d4;
   --text: #ffffff;
   --text-dim: #d4d4d8;
   --text-muted: #a1a1aa;
   --text-faint: #71717a;
+  --input-bg: #09090b;
+  --card-shadow: none;
+  --header-bg: rgba(9,9,11,0.8);
+  --modal-overlay: rgba(0,0,0,0.7);
+}
+
+/* ── Light Mode ── */
+[data-theme="light"] {
+  --bg: #f4f4f5;
+  --surface: #ffffff;
+  --surface-hover: #fafafa;
+  --border: #e4e4e7;
+  --border-hover: #d4d4d8;
+  --accent: #2563eb;
+  --accent-hover: #1d4ed8;
+  --accent-dim: #3b82f6;
+  --accent-bg: rgba(37,99,235,0.06);
+  --accent-border: rgba(37,99,235,0.25);
+  --accent-text: #2563eb;
+  --danger: #dc2626;
+  --danger-hover: #b91c1c;
+  --danger-bg: rgba(220,38,38,0.08);
+  --danger-border: rgba(220,38,38,0.25);
+  --success: #16a34a;
+  --info: #0891b2;
+  --text: #09090b;
+  --text-dim: #3f3f46;
+  --text-muted: #52525b;
+  --text-faint: #a1a1aa;
+  --input-bg: #f4f4f5;
+  --card-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  --header-bg: rgba(255,255,255,0.85);
+  --modal-overlay: rgba(0,0,0,0.4);
 }
 
 html, body {
@@ -29,6 +66,7 @@ html, body {
   color: var(--text-dim);
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
+  transition: background-color .2s, color .2s;
 }
 
 a { color: var(--accent); text-decoration: none; }
@@ -62,14 +100,14 @@ input, textarea, select { font-family: inherit; }
   letter-spacing: 0.3px;
   white-space: nowrap;
 }
-.status-OPEN { background: rgba(245,158,11,0.15); color: var(--accent); }
-.status-IN_PROGRESS { background: rgba(6,182,212,0.15); color: var(--info); }
-.status-RESOLVED { background: rgba(34,197,94,0.15); color: var(--success); }
+.status-OPEN { background: var(--accent-bg); color: var(--accent-text); }
+.status-IN_PROGRESS { background: rgba(6,182,212,0.1); color: var(--info); }
+.status-RESOLVED { background: rgba(34,197,94,0.1); color: var(--success); }
 .status-CLOSED { background: var(--surface); color: var(--text-faint); border: 1px solid var(--border); }
 .priority-LOW { background: var(--surface); color: var(--text-faint); border: 1px solid var(--border); }
-.priority-MEDIUM { background: rgba(245,158,11,0.1); color: var(--accent-dim); }
-.priority-HIGH { background: rgba(245,158,11,0.2); color: var(--accent); }
-.priority-CRITICAL { background: rgba(239,68,68,0.15); color: var(--danger); }
+.priority-MEDIUM { background: var(--accent-bg); color: var(--accent-text); }
+.priority-HIGH { background: var(--accent-bg); color: var(--accent); font-weight: 700; }
+.priority-CRITICAL { background: var(--danger-bg); color: var(--danger); }
 
 /* Spinner */
 .spinner {
@@ -81,6 +119,10 @@ input, textarea, select { font-family: inherit; }
   border-radius: 50%;
   animation: spin .6s linear infinite;
 }
+[data-theme="light"] .spinner {
+  border-color: rgba(0,0,0,.15);
+  border-top-color: var(--accent);
+}
 @keyframes spin { to { transform: rotate(360deg); } }
 
 /* Nav buttons */
@@ -89,7 +131,7 @@ input, textarea, select { font-family: inherit; }
   align-items: center;
   gap: 6px;
   padding: 6px 14px;
-  background: var(--bg);
+  background: var(--input-bg);
   border: 1px solid var(--border);
   border-radius: 8px;
   color: var(--text-muted);
@@ -110,7 +152,7 @@ input, textarea, select { font-family: inherit; }
   background: var(--accent);
   border: 1px solid var(--accent);
   border-radius: 8px;
-  color: #000;
+  color: #fff;
   text-decoration: none;
   font-size: 13px;
   font-weight: 600;
@@ -118,6 +160,26 @@ input, textarea, select { font-family: inherit; }
 }
 .nav-btn-primary:hover {
   background: var(--accent-hover);
+}
+
+/* Theme toggle button */
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: var(--input-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 16px;
+  transition: border-color .15s, color .15s, background .15s;
+}
+.theme-toggle:hover {
+  border-color: var(--accent-border);
+  color: var(--text);
 }
 
 /* Responsive */

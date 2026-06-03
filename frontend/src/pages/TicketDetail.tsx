@@ -12,7 +12,6 @@ export default function TicketDetail() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [comment, setComment] = useState("");
-
   const [status, setStatus] = useState("");
   const [priority, setPriority] = useState("");
   const [description, setDescription] = useState("");
@@ -38,64 +37,44 @@ export default function TicketDetail() {
 
   useEffect(() => {
     fetch();
-    if (isStaff) {
-      getUsers().then(setUsers).catch(() => {});
-    }
+    if (isStaff) getUsers().then(setUsers).catch(() => {});
   }, [id]);
 
   const handleUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       const body: Record<string, unknown> = { description };
-      if (isStaff) {
-        body.status = status;
-        body.priority = priority;
-        body.assigneeId = assigneeId ? parseInt(assigneeId) : null;
-      }
+      if (isStaff) { body.status = status; body.priority = priority; body.assigneeId = assigneeId ? parseInt(assigneeId) : null; }
       await updateTicket(Number(id), body);
       fetch();
-    } catch (err: any) {
-      alert(err.message);
-    }
+    } catch (err: any) { alert(err.message); }
   };
 
   const handleDelete = async () => {
     if (!confirm("Delete this ticket permanently?")) return;
-    try {
-      await deleteTicket(Number(id));
-      navigate("/");
-    } catch (err: any) {
-      alert(err.message);
-    }
+    try { await deleteTicket(Number(id)); navigate("/"); }
+    catch (err: any) { alert(err.message); }
   };
 
   const handleComment = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!comment.trim()) return;
-    try {
-      await createComment(Number(id), comment);
-      setComment("");
-      fetch();
-    } catch (err: any) {
-      alert(err.message);
-    }
+    try { await createComment(Number(id), comment); setComment(""); fetch(); }
+    catch (err: any) { alert(err.message); }
   };
 
   if (loading) return <div style={{ padding: 48, textAlign: "center" }}>Loading...</div>;
-  if (error) return <div style={{ padding: 16, background: "rgba(239,68,68,0.15)", color: "#fca5a5", borderRadius: 8, border: "1px solid rgba(239,68,68,0.3)" }}>{error}</div>;
+  if (error) return <div style={{ padding: 16, background: "var(--danger-bg)", color: "var(--danger)", borderRadius: 8, border: "1px solid var(--danger-border)" }}>{error}</div>;
   if (!ticket) return null;
 
   return (
     <div>
       <Link to="/" style={{ fontSize: 13, color: "var(--text-faint)" }}>← Back to tickets</Link>
-
       <div style={{ marginTop: 16 }}>
         <div style={styles.header}>
           <div>
             <h1 style={{ fontSize: 22, fontWeight: 600, color: "var(--text)" }}>{ticket.title}</h1>
-            <div style={styles.meta}>
-              Opened by {ticket.author.name} · {timeAgo(ticket.createdAt)}
-            </div>
+            <div style={styles.meta}>Opened by {ticket.author.name} · {timeAgo(ticket.createdAt)}</div>
           </div>
           <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
             <span className={`badge status-${ticket.status}`}>{ticket.status.replace("_", " ")}</span>
@@ -106,9 +85,7 @@ export default function TicketDetail() {
         <div style={styles.card}>
           <p style={styles.desc}>{ticket.description}</p>
           <div style={{ fontSize: 13, color: "var(--text-faint)", marginTop: 12 }}>
-            {ticket.assignee
-              ? <>Assigned to <strong style={{ color: "var(--text-dim)" }}>{ticket.assignee.name}</strong></>
-              : "Unassigned"}
+            {ticket.assignee ? <>Assigned to <strong style={{ color: "var(--text-dim)" }}>{ticket.assignee.name}</strong></> : "Unassigned"}
           </div>
         </div>
 
@@ -139,37 +116,20 @@ export default function TicketDetail() {
                     </div>
                     <div style={{ gridColumn: "1 / -1" }}>
                       <label style={styles.label}>Assignee</label>
-                      <select
-                        value={assigneeId}
-                        onChange={(e) => setAssigneeId(e.target.value)}
-                        style={styles.input}
-                      >
+                      <select value={assigneeId} onChange={(e) => setAssigneeId(e.target.value)} style={styles.input}>
                         <option value="">— Unassigned —</option>
-                        {users.map((u) => (
-                          <option key={u.id} value={u.id}>
-                            {u.name} ({u.email})
-                          </option>
-                        ))}
+                        {users.map((u) => (<option key={u.id} value={u.id}>{u.name} ({u.email})</option>))}
                       </select>
                     </div>
                   </>
                 )}
                 <div style={{ gridColumn: "1 / -1" }}>
                   <label style={styles.label}>Description</label>
-                  <textarea
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                    rows={4}
-                    style={styles.input}
-                  />
+                  <textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={4} style={styles.input} />
                 </div>
               </div>
               <div style={{ textAlign: "right", marginTop: 16, display: "flex", gap: 8, justifyContent: "flex-end" }}>
-                {isAdmin && (
-                  <button type="button" onClick={handleDelete} style={styles.deleteBtn}>
-                    🗑 Delete
-                  </button>
-                )}
+                {isAdmin && (<button type="button" onClick={handleDelete} style={styles.deleteBtn}>🗑 Delete</button>)}
                 <button type="submit" style={styles.saveBtn}>Save Changes</button>
               </div>
             </form>
@@ -191,15 +151,8 @@ export default function TicketDetail() {
           ) : (
             <p style={{ color: "var(--text-faint)" }}>No comments yet</p>
           )}
-
           <form onSubmit={handleComment} style={{ marginTop: 12 }}>
-            <textarea
-              value={comment}
-              onChange={(e) => setComment(e.target.value)}
-              placeholder="Write a comment..."
-              rows={3}
-              style={styles.input}
-            />
+            <textarea value={comment} onChange={(e) => setComment(e.target.value)} placeholder="Write a comment..." rows={3} style={styles.input} />
             <button type="submit" style={{ ...styles.saveBtn, marginTop: 8 }}>Post Comment</button>
           </form>
         </div>
@@ -211,74 +164,22 @@ export default function TicketDetail() {
 function timeAgo(dateStr: string) {
   const s = Math.floor((Date.now() - new Date(dateStr).getTime()) / 1000);
   if (s < 60) return "just now";
-  const m = Math.floor(s / 60);
-  if (m < 60) return `${m}m ago`;
-  const h = Math.floor(m / 60);
-  if (h < 24) return `${h}h ago`;
-  const d = Math.floor(h / 24);
-  if (d < 30) return `${d}d ago`;
+  const m = Math.floor(s / 60); if (m < 60) return `${m}m ago`;
+  const h = Math.floor(m / 60); if (h < 24) return `${h}h ago`;
+  const d = Math.floor(h / 24); if (d < 30) return `${d}d ago`;
   return new Date(dateStr).toLocaleDateString();
 }
 
 const styles: Record<string, React.CSSProperties> = {
-  header: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "flex-start",
-    gap: 16,
-    marginBottom: 20,
-    flexWrap: "wrap",
-  },
+  header: { display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 16, marginBottom: 20, flexWrap: "wrap" },
   meta: { fontSize: 13, color: "var(--text-faint)", marginTop: 4 },
-  card: {
-    background: "var(--surface)",
-    border: "1px solid var(--border)",
-    borderRadius: 8,
-    padding: 20,
-    marginBottom: 16,
-  },
+  card: { background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 8, padding: 20, marginBottom: 16, boxShadow: "var(--card-shadow)" },
   desc: { color: "var(--text-dim)", whiteSpace: "pre-wrap" },
   sectionTitle: { fontSize: 14, fontWeight: 600, color: "var(--text-faint)", marginBottom: 16, textTransform: "uppercase", letterSpacing: 0.5 },
   label: { display: "block", fontSize: 13, fontWeight: 500, marginBottom: 6, color: "var(--text-muted)" },
-  input: {
-    width: "100%",
-    padding: "8px 12px",
-    background: "var(--bg)",
-    border: "1px solid var(--border)",
-    borderRadius: 8,
-    color: "var(--text)",
-    fontSize: 14,
-  },
-  saveBtn: {
-    padding: "8px 16px",
-    background: "var(--accent)",
-    color: "#000",
-    border: "none",
-    borderRadius: 8,
-    fontSize: 14,
-    fontWeight: 600,
-    cursor: "pointer",
-  },
-  deleteBtn: {
-    padding: "8px 16px",
-    background: "transparent",
-    color: "var(--danger)",
-    border: "1px solid var(--danger)",
-    borderRadius: 8,
-    fontSize: 14,
-    cursor: "pointer",
-  },
-  comment: {
-    padding: 12,
-    background: "var(--bg)",
-    border: "1px solid var(--border)",
-    borderRadius: 8,
-    marginBottom: 8,
-  },
-  commentHeader: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 6,
-  },
+  input: { width: "100%", padding: "8px 12px", background: "var(--input-bg)", border: "1px solid var(--border)", borderRadius: 8, color: "var(--text)", fontSize: 14 },
+  saveBtn: { padding: "8px 16px", background: "var(--accent)", color: "#fff", border: "none", borderRadius: 8, fontSize: 14, fontWeight: 600, cursor: "pointer" },
+  deleteBtn: { padding: "8px 16px", background: "transparent", color: "var(--danger)", border: "1px solid var(--danger)", borderRadius: 8, fontSize: 14, cursor: "pointer" },
+  comment: { padding: 12, background: "var(--input-bg)", border: "1px solid var(--border)", borderRadius: 8, marginBottom: 8 },
+  commentHeader: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 },
 };

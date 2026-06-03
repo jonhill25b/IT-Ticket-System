@@ -1,8 +1,10 @@
 import { Outlet, useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { useTheme } from "../context/ThemeContext";
 
 export default function Layout() {
   const { user, logout, isStaff } = useAuth();
+  const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -23,6 +25,14 @@ export default function Layout() {
             <Link to="/users" className="nav-btn">👥 Users</Link>
           )}
           <Link to="/tickets/new" className="nav-btn-primary">+ New Ticket</Link>
+          <button
+            onClick={toggleTheme}
+            className="theme-toggle"
+            title={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+            aria-label="Toggle theme"
+          >
+            {theme === "dark" ? "☀️" : "🌙"}
+          </button>
           <div style={styles.userInfo}>
             <span>{user?.name}</span>
             <span className={`role-tag role-${user?.role}`}>{user?.role}</span>
@@ -40,7 +50,7 @@ export default function Layout() {
 
 const styles: Record<string, React.CSSProperties> = {
   header: {
-    background: "rgba(9,9,11,0.8)",
+    background: "var(--header-bg)",
     backdropFilter: "blur(12px)",
     borderBottom: "1px solid var(--border)",
     padding: "0 24px",

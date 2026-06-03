@@ -2,9 +2,11 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { login, register } from "../api";
 import { useAuth } from "../context/AuthContext";
+import { useTheme } from "../context/ThemeContext";
 
 export default function Login() {
   const { login: setAuth } = useAuth();
+  const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState(true);
   const [name, setName] = useState("");
@@ -34,10 +36,20 @@ export default function Login() {
 
   return (
     <div style={styles.wrapper}>
+      <button
+        onClick={toggleTheme}
+        className="theme-toggle"
+        style={styles.pageToggle}
+        title={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+        aria-label="Toggle theme"
+      >
+        {theme === "dark" ? "☀️" : "🌙"}
+      </button>
+
       <div style={styles.card}>
         <h1 style={styles.title}>
           <span style={{ fontSize: 28 }}>🎫</span>{" "}
-          <span style={{ color: "#fff" }}>IT</span>{" "}
+          <span style={{ color: "var(--text)" }}>IT</span>{" "}
           <span style={{ color: "var(--accent)" }}>Tickets</span>
         </h1>
 
@@ -111,6 +123,12 @@ const styles: Record<string, React.CSSProperties> = {
     justifyContent: "center",
     minHeight: "100vh",
     padding: 24,
+    position: "relative",
+  },
+  pageToggle: {
+    position: "absolute",
+    top: 24,
+    right: 24,
   },
   card: {
     width: "100%",
@@ -119,6 +137,7 @@ const styles: Record<string, React.CSSProperties> = {
     border: "1px solid var(--border)",
     borderRadius: 12,
     padding: 32,
+    boxShadow: "var(--card-shadow)",
   },
   title: { textAlign: "center", marginBottom: 24, fontSize: 24, fontWeight: 700 },
   tabs: { display: "flex", marginBottom: 24, borderBottom: "1px solid var(--border)" },
@@ -146,7 +165,7 @@ const styles: Record<string, React.CSSProperties> = {
   input: {
     width: "100%",
     padding: "10px 12px",
-    background: "var(--bg)",
+    background: "var(--input-bg)",
     border: "1px solid var(--border)",
     borderRadius: 8,
     color: "var(--text)",
@@ -156,7 +175,7 @@ const styles: Record<string, React.CSSProperties> = {
     width: "100%",
     padding: "10px 16px",
     background: "var(--accent)",
-    color: "#000",
+    color: "#fff",
     border: "none",
     borderRadius: 8,
     fontSize: 14,
@@ -169,8 +188,8 @@ const styles: Record<string, React.CSSProperties> = {
     borderRadius: 8,
     fontSize: 13,
     marginBottom: 16,
-    background: "rgba(239,68,68,0.15)",
-    color: "#fca5a5",
-    border: "1px solid rgba(239,68,68,0.3)",
+    background: "var(--danger-bg)",
+    color: "var(--danger)",
+    border: "1px solid var(--danger-border)",
   },
 };

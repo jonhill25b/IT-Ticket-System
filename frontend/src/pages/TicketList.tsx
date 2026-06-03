@@ -44,11 +44,7 @@ export default function TicketList() {
       </div>
 
       <div style={styles.filters}>
-        <select
-          value={status}
-          onChange={(e) => setStatus(e.target.value)}
-          style={styles.select}
-        >
+        <select value={status} onChange={(e) => setStatus(e.target.value)} style={styles.select}>
           <option value="">All Statuses</option>
           <option value="OPEN">Open</option>
           <option value="IN_PROGRESS">In Progress</option>
@@ -57,13 +53,7 @@ export default function TicketList() {
         </select>
         {isStaff && (
           <form onSubmit={handleSearch} style={{ display: "flex", gap: 8 }}>
-            <input
-              type="search"
-              value={q}
-              onChange={(e) => setQ(e.target.value)}
-              placeholder="Search tickets..."
-              style={styles.search}
-            />
+            <input type="search" value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search tickets..." style={styles.search} />
             <button type="submit" style={styles.searchBtn}>Search</button>
           </form>
         )}
@@ -89,9 +79,7 @@ export default function TicketList() {
                   {t._count?.comments ?? 0} comments
                 </div>
               </div>
-              <span className={`badge status-${t.status}`}>
-                {t.status.replace("_", " ")}
-              </span>
+              <span className={`badge status-${t.status}`}>{t.status.replace("_", " ")}</span>
               <span className={`badge priority-${t.priority}`}>{t.priority}</span>
               <span style={styles.assignee}>
                 {t.assignee ? `👤 ${t.assignee.name}` : "Unassigned"}
@@ -117,98 +105,16 @@ function timeAgo(dateStr: string) {
 }
 
 const styles: Record<string, React.CSSProperties> = {
-  topBar: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 16,
-  },
-  newBtn: {
-    padding: "8px 16px",
-    background: "var(--accent)",
-    color: "#000",
-    borderRadius: 8,
-    fontSize: 14,
-    fontWeight: 600,
-    textDecoration: "none",
-  },
-  filters: {
-    display: "flex",
-    gap: 8,
-    marginBottom: 16,
-    flexWrap: "wrap",
-    alignItems: "center",
-  },
-  select: {
-    padding: "8px 12px",
-    background: "var(--bg)",
-    border: "1px solid var(--border)",
-    borderRadius: 8,
-    color: "var(--text)",
-    fontSize: 14,
-    minWidth: 140,
-  },
-  search: {
-    padding: "8px 12px",
-    background: "var(--bg)",
-    border: "1px solid var(--border)",
-    borderRadius: 8,
-    color: "var(--text)",
-    fontSize: 14,
-    minWidth: 200,
-  },
-  searchBtn: {
-    padding: "8px 14px",
-    background: "var(--surface)",
-    border: "1px solid var(--border)",
-    borderRadius: 8,
-    color: "var(--text)",
-    fontSize: 14,
-    cursor: "pointer",
-  },
-  error: {
-    padding: "10px 14px",
-    borderRadius: 8,
-    fontSize: 13,
-    marginBottom: 16,
-    background: "rgba(239,68,68,0.15)",
-    color: "#fca5a5",
-    border: "1px solid rgba(239,68,68,0.3)",
-  },
-  empty: {
-    textAlign: "center",
-    padding: 48,
-    color: "var(--text-faint)",
-  },
-  row: {
-    display: "grid",
-    gridTemplateColumns: "1fr auto auto auto",
-    alignItems: "center",
-    gap: 16,
-    padding: "12px 16px",
-    background: "var(--surface)",
-    border: "1px solid var(--border)",
-    borderRadius: 8,
-    textDecoration: "none",
-    color: "inherit",
-    transition: "border-color .15s",
-  },
-  rowTitle: {
-    fontWeight: 500,
-    color: "var(--text)",
-    overflow: "hidden",
-    textOverflow: "ellipsis",
-    whiteSpace: "nowrap",
-  },
-  rowMeta: {
-    fontSize: 12,
-    color: "var(--text-faint)",
-    marginTop: 2,
-  },
-  assignee: {
-    fontSize: 12,
-    color: "var(--text-muted)",
-    minWidth: 100,
-    textAlign: "right",
-  },
+  topBar: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 },
+  newBtn: { padding: "8px 16px", background: "var(--accent)", color: "#fff", borderRadius: 8, fontSize: 14, fontWeight: 600, textDecoration: "none" },
+  filters: { display: "flex", gap: 8, marginBottom: 16, flexWrap: "wrap", alignItems: "center" },
+  select: { padding: "8px 12px", background: "var(--input-bg)", border: "1px solid var(--border)", borderRadius: 8, color: "var(--text)", fontSize: 14, minWidth: 140 },
+  search: { padding: "8px 12px", background: "var(--input-bg)", border: "1px solid var(--border)", borderRadius: 8, color: "var(--text)", fontSize: 14, minWidth: 200 },
+  searchBtn: { padding: "8px 14px", background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 8, color: "var(--text)", fontSize: 14, cursor: "pointer" },
+  error: { padding: "10px 14px", borderRadius: 8, fontSize: 13, marginBottom: 16, background: "var(--danger-bg)", color: "var(--danger)", border: "1px solid var(--danger-border)" },
+  empty: { textAlign: "center", padding: 48, color: "var(--text-faint)" },
+  row: { display: "grid", gridTemplateColumns: "1fr auto auto auto", alignItems: "center", gap: 16, padding: "12px 16px", background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 8, textDecoration: "none", color: "inherit", transition: "border-color .15s", boxShadow: "var(--card-shadow)" },
+  rowTitle: { fontWeight: 500, color: "var(--text)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" },
+  rowMeta: { fontSize: 12, color: "var(--text-faint)", marginTop: 2 },
+  assignee: { fontSize: 12, color: "var(--text-muted)", minWidth: 100, textAlign: "right" },
 };

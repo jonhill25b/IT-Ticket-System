@@ -27,40 +27,19 @@ export default function NewTicket() {
   return (
     <div style={{ maxWidth: 640 }}>
       <Link to="/" style={{ fontSize: 13, color: "var(--text-faint)" }}>← Back to tickets</Link>
-
-      <div style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 8, padding: 24, marginTop: 16 }}>
+      <div style={styles.card}>
         <h2 style={{ fontSize: 20, fontWeight: 600, color: "var(--text)", marginBottom: 20 }}>New Ticket</h2>
-
-        {error && (
-          <div style={{ padding: "10px 14px", borderRadius: 8, fontSize: 13, marginBottom: 16, background: "rgba(239,68,68,0.15)", color: "#fca5a5", border: "1px solid rgba(239,68,68,0.3)" }}>
-            {error}
-          </div>
-        )}
-
+        {error && <div style={styles.error}>{error}</div>}
         <form onSubmit={handleSubmit}>
-          <div style={{ marginBottom: 16 }}>
+          <div style={styles.group}>
             <label style={styles.label}>Title</label>
-            <input
-              type="text"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              required
-              placeholder="Brief summary of the issue"
-              style={styles.input}
-            />
+            <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} required placeholder="Brief summary of the issue" style={styles.input} />
           </div>
-          <div style={{ marginBottom: 16 }}>
+          <div style={styles.group}>
             <label style={styles.label}>Description</label>
-            <textarea
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              required
-              rows={5}
-              placeholder="Detailed description..."
-              style={styles.input}
-            />
+            <textarea value={description} onChange={(e) => setDescription(e.target.value)} required rows={5} placeholder="Detailed description..." style={styles.input} />
           </div>
-          <div style={{ marginBottom: 16 }}>
+          <div style={styles.group}>
             <label style={styles.label}>Priority</label>
             <select value={priority} onChange={(e) => setPriority(e.target.value)} style={styles.input}>
               <option value="LOW">Low</option>
@@ -71,9 +50,7 @@ export default function NewTicket() {
           </div>
           <div style={{ display: "flex", gap: 8, justifyContent: "flex-end" }}>
             <Link to="/" style={styles.cancelBtn}>Cancel</Link>
-            <button type="submit" style={styles.submitBtn} disabled={loading}>
-              {loading ? "Creating..." : "Create Ticket"}
-            </button>
+            <button type="submit" style={styles.submitBtn} disabled={loading}>{loading ? "Creating..." : "Create Ticket"}</button>
           </div>
         </form>
       </div>
@@ -82,32 +59,11 @@ export default function NewTicket() {
 }
 
 const styles: Record<string, React.CSSProperties> = {
+  card: { background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 8, padding: 24, marginTop: 16, boxShadow: "var(--card-shadow)" },
+  group: { marginBottom: 16 },
   label: { display: "block", fontSize: 13, fontWeight: 500, marginBottom: 6, color: "var(--text-muted)" },
-  input: {
-    width: "100%",
-    padding: "8px 12px",
-    background: "var(--bg)",
-    border: "1px solid var(--border)",
-    borderRadius: 8,
-    color: "var(--text)",
-    fontSize: 14,
-  },
-  cancelBtn: {
-    padding: "8px 16px",
-    color: "var(--text-muted)",
-    textDecoration: "none",
-    fontSize: 14,
-    border: "1px solid var(--border)",
-    borderRadius: 8,
-  },
-  submitBtn: {
-    padding: "8px 16px",
-    background: "var(--accent)",
-    color: "#000",
-    border: "none",
-    borderRadius: 8,
-    fontSize: 14,
-    fontWeight: 600,
-    cursor: "pointer",
-  },
+  input: { width: "100%", padding: "8px 12px", background: "var(--input-bg)", border: "1px solid var(--border)", borderRadius: 8, color: "var(--text)", fontSize: 14 },
+  cancelBtn: { padding: "8px 16px", color: "var(--text-muted)", textDecoration: "none", fontSize: 14, border: "1px solid var(--border)", borderRadius: 8 },
+  submitBtn: { padding: "8px 16px", background: "var(--accent)", color: "#fff", border: "none", borderRadius: 8, fontSize: 14, fontWeight: 600, cursor: "pointer" },
+  error: { padding: "10px 14px", borderRadius: 8, fontSize: 13, marginBottom: 16, background: "var(--danger-bg)", color: "var(--danger)", border: "1px solid var(--danger-border)" },
 };
